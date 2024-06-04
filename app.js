@@ -37,37 +37,30 @@ async function createAdminUser() {
   }
 }
 
-// const mongoose = require('mongoose');
-
 mongoose.connect('mongodb://127.0.0.1:27017/dances', {
-  useNewUrlParser: true, 
-  useUnifiedTopology: true, 
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 }).then(() => {
   console.log('Successfully connected to the database');
 }).catch((error) => {
   console.error('Connection error:', error);
 });
 
-
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', async function () {
-    console.log('Connected to MongoDB');
-    await createAdminUser();
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
+  console.log('Connected to MongoDB');
+  await createAdminUser();
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
-
-app.get('/dances', async (req, res) => {
+app.get('/api/dances', async (req, res) => {
   try {
     const dances = await Dance.find();
     res.json(dances);
@@ -76,7 +69,7 @@ app.get('/dances', async (req, res) => {
   }
 });
 
-app.post('/dances', async (req, res) => {
+app.post('/api/dances', async (req, res) => {
   try {
     const newDance = new Dance(req.body);
     await newDance.save();
@@ -86,7 +79,7 @@ app.post('/dances', async (req, res) => {
   }
 });
 
-app.delete('/dances/:id', async (req, res) => {
+app.delete('/api/dances/:id', async (req, res) => {
   try {
     await Dance.findByIdAndDelete(req.params.id);
     res.status(204).end();
@@ -95,7 +88,7 @@ app.delete('/dances/:id', async (req, res) => {
   }
 });
 
-app.get('/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -104,7 +97,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.post('/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   try {
     const newUser = new User(req.body);
     await newUser.save();
@@ -114,7 +107,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.delete('/users/:id', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(204).end();
@@ -123,7 +116,7 @@ app.delete('/users/:id', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { login, password } = req.body;
   try {
     const user = await User.findOne({ login, password });
