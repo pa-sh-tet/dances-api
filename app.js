@@ -63,7 +63,7 @@ db.once('open', async function () {
 
 // Middleware
 app.use(cors({
-  origin: 'http://crystal-dance.ru',
+  origin: 'http://80.78.243.127',
   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -81,7 +81,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Маршруты
-app.post('/api/contact', (req, res) => {
+app.post('/contact', (req, res) => {
   const { name, phone, message } = req.body;
 
   const mailOptions = {
@@ -102,7 +102,7 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-app.get('/api/dances', async (req, res) => {
+app.get('/dances', async (req, res) => {
   try {
     const dances = await Dance.find();
     res.json(dances);
@@ -111,7 +111,7 @@ app.get('/api/dances', async (req, res) => {
   }
 });
 
-app.post('/api/dances', async (req, res) => {
+app.post('/dances', async (req, res) => {
   try {
     const newDance = new Dance(req.body);
     await newDance.save();
@@ -121,7 +121,7 @@ app.post('/api/dances', async (req, res) => {
   }
 });
 
-app.delete('/api/dances/:id', async (req, res) => {
+app.delete('/dances/:id', async (req, res) => {
   try {
     await Dance.findByIdAndDelete(req.params.id);
     res.status(204).end();
@@ -130,7 +130,7 @@ app.delete('/api/dances/:id', async (req, res) => {
   }
 });
 
-app.get('/api/users', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -139,7 +139,7 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-app.post('/api/users', async (req, res) => {
+app.post('/users', async (req, res) => {
   try {
     const newUser = new User(req.body);
     await newUser.save();
@@ -149,7 +149,7 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-app.delete('/api/users/:id', async (req, res) => {
+app.delete('/users/:id', async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(204).end();
@@ -158,7 +158,7 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { login, password } = req.body;
   try {
     const user = await User.findOne({ login, password });
