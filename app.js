@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Определение схем и моделей
 const danceSchema = new mongoose.Schema({
   title: String,
   description: String,
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema({
 const Dance = mongoose.model('Dance', danceSchema);
 const User = mongoose.model('User', userSchema);
 
+// Создание администратора
 async function createAdminUser() {
   const adminUser = await User.findOne({ login: 'admin' });
   if (!adminUser) {
@@ -38,6 +40,7 @@ async function createAdminUser() {
   }
 }
 
+// Подключение к базе данных
 mongoose.connect('mongodb://127.0.0.1:27017/dances', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -58,11 +61,15 @@ db.once('open', async function () {
   });
 });
 
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: 'http://crystal-dance.ru',
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
-// const nodemailer = require('nodemailer');
-
+// Настройка nodemailer
 const transporter = nodemailer.createTransport({
   host: 'smtp.mail.ru',
   port: 465,
@@ -73,6 +80,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// Маршруты
 app.post('/api/contact', (req, res) => {
   const { name, phone, message } = req.body;
 
