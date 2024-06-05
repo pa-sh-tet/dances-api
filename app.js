@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,7 +29,7 @@ async function createAdminUser() {
       fio: 'Admin Admin Admin',
       date: '01.01.2000',
       login: 'admin',
-      password: 'admin' // Рекомендуется хэшировать пароль перед сохранением
+      password: 'admin'
     });
     await newAdmin.save();
     console.log('Admin user created');
@@ -59,6 +60,39 @@ db.once('open', async function () {
 
 app.use(cors());
 app.use(express.json());
+
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.mail.ru',
+  port: 465,
+  secure: true, // true for 465, false for other ports
+  auth: {
+    user: 'altapav.pa@mail.ru',
+    pass: 'tPYBYzul1)1t'
+  }
+});
+
+app.post('/api/contact', (req, res) => {
+  const { name, phone, message } = req.body;
+
+  const mailOptions = {
+    from: 'altapav.pa@mail.ru',
+    to: 'pavel.altapov@yandex.ru',
+    subject: 'New Contact Request',
+    text: `Name: ${name}\nPhone: ${phone}\nMessage: ${message}`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).send('Email sent');
+    }
+  });
+});
 
 app.get('/api/dances', async (req, res) => {
   try {
