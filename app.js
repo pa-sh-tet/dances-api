@@ -62,19 +62,13 @@ db.once('open', async function () {
 });
 
 // Middleware
-// app.use(cors(
-//   {
-//   origin: 'http://80.78.243.127',
-//   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }
-// ));
-// app.options('*', cors({
-//   origin: 'http://crystal-dance.ru',
-//   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
-app.use(cors());
+app.use(cors({
+  origin: 'http://crystal-dance.ru',
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// app.use(cors());
 app.use(express.json());
 
 // Настройка nodemailer
