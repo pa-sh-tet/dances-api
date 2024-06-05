@@ -63,11 +63,11 @@ db.once('open', async function () {
 
 // Middleware
 app.use(cors(
-  {
-  origin: 'http://80.78.243.127',
-  methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}
+//   {
+//   origin: 'http://80.78.243.127',
+//   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }
 ));
 app.use(express.json());
 
