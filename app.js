@@ -61,7 +61,7 @@ db.once('open', async function () {
 app.use(cors());
 app.use(express.json());
 
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.mail.ru',
