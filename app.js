@@ -62,13 +62,18 @@ db.once('open', async function () {
 });
 
 // Middleware
+
+// Рабочий вариант:
 app.use(cors({
   origin: 'http://crystal-dance.ru',
   methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
+// Для демонстрации:
 // app.use(cors());
+
 app.use(express.json());
 
 // Настройка nodemailer
@@ -173,5 +178,17 @@ app.post('/login', async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+app.patch('/dances/:id', async (req, res) => {
+  try {
+    const dance = await Dance.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!dance) {
+      return res.status(404).json({ message: 'Dance not found' });
+    }
+    res.json(dance);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
